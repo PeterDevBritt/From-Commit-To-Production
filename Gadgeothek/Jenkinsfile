@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh ./gradlew build
+                cd Gadgeothek; ./gradlew build
             }
         }
         stage('End2End Tests') {
@@ -20,6 +20,5 @@ pipeline {
         success {
             archiveArtifacts '**/outputs/apk/*.apk'
         }
-
     }
 }
