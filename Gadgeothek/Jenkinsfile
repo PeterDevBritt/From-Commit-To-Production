@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'echo Build'
+                sh ./gradlew build
             }
         }
         stage('End2End Tests') {
@@ -15,5 +15,11 @@ pipeline {
                 sh 'echo End2End Tests'
             }
         }
+    }
+    post {
+        success {
+            archiveArtifacts '**/outputs/apk/*.apk'
+        }
+
     }
 }
