@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                cd Gadgeothek; ./gradlew build
+                sh 'cd Gadgeothek; ./gradlew build'
             }
         }
         stage('End2End Tests') {
