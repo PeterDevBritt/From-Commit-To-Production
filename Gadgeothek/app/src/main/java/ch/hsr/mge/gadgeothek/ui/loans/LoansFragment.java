@@ -18,8 +18,9 @@ import java.util.List;
 import ch.hsr.mge.gadgeothek.R;
 import ch.hsr.mge.gadgeothek.domain.Loan;
 import ch.hsr.mge.gadgeothek.service.Callback;
-import ch.hsr.mge.gadgeothek.service.LibraryService;
 import ch.hsr.mge.gadgeothek.ui.GadgeothekActivity;
+
+import static ch.hsr.mge.gadgeothek.GadgeothekApplication.libraryService;
 
 public class LoansFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
@@ -44,7 +45,7 @@ public class LoansFragment extends Fragment implements SwipeRefreshLayout.OnRefr
     public void onStart() {
         super.onStart();
 
-        if (LibraryService.isLoggedIn()) {
+        if (libraryService.isLoggedIn()) {
             refreshLoans();
         } else {
             snack("You are not logged in!?");
@@ -57,7 +58,7 @@ public class LoansFragment extends Fragment implements SwipeRefreshLayout.OnRefr
 
     private void refreshLoans() {
         refreshLayout.setRefreshing(true);
-        LibraryService.getLoansForCustomer(new Callback<List<Loan>>() {
+        libraryService.getLoansForCustomer(new Callback<List<Loan>>() {
             @Override
             public void onCompletion(List<Loan> newLoans) {
                 setupAdapter();

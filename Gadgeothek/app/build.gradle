@@ -4,6 +4,8 @@ android {
     compileSdkVersion 25
     buildToolsVersion '25.0.3'
 
+    testBuildType "debug"
+
     defaultConfig {
         applicationId "ch.hsr.mge.gadgeothek"
         minSdkVersion 21
@@ -12,7 +14,7 @@ android {
         versionCode 1
         versionName "1.0"
         multiDexEnabled = true
-        testInstrumentationRunner "android.support.test.runner.AndroidJunitRunner"
+        testInstrumentationRunner "ch.hsr.mge.gadgeothek.TestRunner"
     }
     buildTypes {
         release {

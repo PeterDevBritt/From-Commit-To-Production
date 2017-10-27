@@ -9,7 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 
 import ch.hsr.mge.gadgeothek.R;
-import ch.hsr.mge.gadgeothek.service.LibraryService;
+
+import static ch.hsr.mge.gadgeothek.GadgeothekApplication.libraryService;
 
 public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -43,7 +44,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
             editor.putString(key, address);
             editor.commit();
 
-            LibraryService.setServerAddress(address);
+            libraryService.setServerAddress(address);
         }
     }
 

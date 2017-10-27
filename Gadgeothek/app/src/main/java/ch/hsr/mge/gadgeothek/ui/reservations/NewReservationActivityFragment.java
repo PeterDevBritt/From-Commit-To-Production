@@ -24,7 +24,8 @@ import ch.hsr.mge.gadgeothek.R;
 import ch.hsr.mge.gadgeothek.domain.Gadget;
 import ch.hsr.mge.gadgeothek.domain.Reservation;
 import ch.hsr.mge.gadgeothek.service.Callback;
-import ch.hsr.mge.gadgeothek.service.LibraryService;
+
+import static ch.hsr.mge.gadgeothek.GadgeothekApplication.libraryService;
 
 public class NewReservationActivityFragment extends Fragment implements NewReservationsArrayAdapter.OnSelectionChangedListener {
 
@@ -59,10 +60,10 @@ public class NewReservationActivityFragment extends Fragment implements NewReser
         listView.setTextFilterEnabled(true);
         listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE);
 
-        LibraryService.getGadgets(new Callback<List<Gadget>>() {
+        libraryService.getGadgets(new Callback<List<Gadget>>() {
             @Override
             public void onCompletion(final List<Gadget> allAvailableGadgets) {
-                LibraryService.getReservationsForCustomer(new Callback<List<Reservation>>() {
+                libraryService.getReservationsForCustomer(new Callback<List<Reservation>>() {
                     @Override
                     public void onCompletion(List<Reservation> alreadyReserved) {
                         gadgetList.clear();
@@ -171,7 +172,7 @@ public class NewReservationActivityFragment extends Fragment implements NewReser
         final List<Gadget> gadgets = Collections.synchronizedList(new ArrayList<>(dataAdapter.getSelectedGadgets()));
 
         for (final Gadget gadget : gadgets) {
-            LibraryService.reserveGadget(gadget, new Callback<Boolean>() {
+            libraryService.reserveGadget(gadget, new Callback<Boolean>() {
                 @Override
                 public void onCompletion(Boolean success) {
                     gadgets.remove(gadget);

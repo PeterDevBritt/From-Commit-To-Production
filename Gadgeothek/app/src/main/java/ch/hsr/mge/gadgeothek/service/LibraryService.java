@@ -11,6 +11,7 @@ import java.util.List;
 import ch.hsr.mge.gadgeothek.domain.Gadget;
 import ch.hsr.mge.gadgeothek.domain.Loan;
 import ch.hsr.mge.gadgeothek.domain.Reservation;
+import okhttp3.OkHttpClient;
 
 /**
  * Diese Klasse soll kein Vorbild für eine echte Service-Implementierung sein sondern ein Kompromiss,
@@ -20,23 +21,29 @@ public class LibraryService {
 
     private static final String TAG = LibraryService.class.getSimpleName();
     private static LoginToken token;
-    private static String serverUrl;
+    private String serverUrl;
+    private OkHttpClient httpClient;
 
-    public static void setServerAddress(String address) {
+    public LibraryService(String serverUrl, OkHttpClient httpClient) {
+        this.serverUrl = serverUrl;
+        this.httpClient = httpClient;
+    }
+
+    public void setServerAddress(String address) {
         Log.d(TAG, "Setting server to " + address);
         serverUrl = address;
     }
 
-    public static boolean isLoggedIn() {
+    public boolean isLoggedIn() {
         return token != null;
     }
 
-    public static void login(String mail, String password, final Callback<Boolean> callback) {
+    public void login(String mail, String password, final Callback<Boolean> callback) {
         checkServerUrlSet();
         HashMap<String, String> parameter = new HashMap<>();
         parameter.put("email", mail);
         parameter.put("password", password);
-        Request<LoginToken> request = new Request<>(HttpVerb.POST, serverUrl + "/login", LoginToken.class, null, parameter, new Callback<LoginToken>() {
+        Request<LoginToken> request = new Request<>(httpClient, HttpVerb.POST, serverUrl + "/login", LoginToken.class, null, parameter, new Callback<LoginToken>() {
             @Override
             public void onCompletion(LoginToken input) {
                 token = input;
@@ -51,11 +58,11 @@ public class LibraryService {
         request.execute();
     }
 
-    public static void logout(final Callback<Boolean> callback) {
+    public void logout(final Callback<Boolean> callback) {
         checkServerUrlSet();
         HashMap<String, String> headers = getAuthHeaders();
 
-        Request<Boolean> request = new Request<>(HttpVerb.POST, serverUrl + "/logout", Boolean.class, headers, null, new Callback<Boolean>() {
+        Request<Boolean> request = new Request<>(httpClient, HttpVerb.POST, serverUrl + "/logout", Boolean.class, headers, null, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean input) {
                 if (input) {
@@ -73,7 +80,7 @@ public class LibraryService {
         request.execute();
     }
 
-    public static void register(String mail, String password, String name, String studentenNumber, final Callback<Boolean> callback) {
+    public void register(String mail, String password, String name, String studentenNumber, final Callback<Boolean> callback) {
         checkServerUrlSet();
         HashMap<String, String> parameter = new HashMap<>();
         parameter.put("email", mail);
@@ -81,7 +88,7 @@ public class LibraryService {
         parameter.put("name", name);
         parameter.put("studentnumber", studentenNumber);
 
-        Request<Boolean> request = new Request<>(HttpVerb.POST, serverUrl + "/register", Boolean.class, null, parameter, new Callback<Boolean>() {
+        Request<Boolean> request = new Request<>(httpClient, HttpVerb.POST, serverUrl + "/register", Boolean.class, null, parameter, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean input) {
                 callback.onCompletion(input);
@@ -96,12 +103,12 @@ public class LibraryService {
     }
 
 
-    public static void getLoansForCustomer(final Callback<List<Loan>> callback) {
+    public void getLoansForCustomer(final Callback<List<Loan>> callback) {
         checkServerUrlSet();
         checkLoggedIn();
         HashMap<String, String> headers = getAuthHeaders();
 
-        Request<List<Loan>> request = new Request<>(HttpVerb.GET, serverUrl + "/loans", new TypeToken<List<Loan>>() {
+        Request<List<Loan>> request = new Request<>(httpClient, HttpVerb.GET, serverUrl + "/loans", new TypeToken<List<Loan>>() {
         }.getType(), headers, null, new Callback<List<Loan>>() {
             @Override
             public void onCompletion(List<Loan> input) {
@@ -116,12 +123,12 @@ public class LibraryService {
         request.execute();
     }
 
-    public static void getReservationsForCustomer(final Callback<List<Reservation>> callback) {
+    public void getReservationsForCustomer(final Callback<List<Reservation>> callback) {
         checkServerUrlSet();
         checkLoggedIn();
         HashMap<String, String> headers = getAuthHeaders();
 
-        Request<List<Reservation>> request = new Request<>(HttpVerb.GET, serverUrl + "/reservations", new TypeToken<List<Reservation>>() {
+        Request<List<Reservation>> request = new Request<>(httpClient, HttpVerb.GET, serverUrl + "/reservations", new TypeToken<List<Reservation>>() {
         }.getType(), headers, null, new Callback<List<Reservation>>() {
             @Override
             public void onCompletion(List<Reservation> input) {
@@ -137,7 +144,7 @@ public class LibraryService {
     }
 
 
-    public static void reserveGadget(Gadget toReserve, final Callback<Boolean> callback) {
+    public void reserveGadget(Gadget toReserve, final Callback<Boolean> callback) {
         checkServerUrlSet();
         checkLoggedIn();
         HashMap<String, String> headers = getAuthHeaders();
@@ -145,7 +152,7 @@ public class LibraryService {
         HashMap<String, String> parameter = new HashMap<>();
         parameter.put("gadgetId", toReserve.getInventoryNumber());
 
-        Request<Boolean> request = new Request<>(HttpVerb.POST, serverUrl + "/reservations", new TypeToken<Boolean>() {
+        Request<Boolean> request = new Request<>(httpClient, HttpVerb.POST, serverUrl + "/reservations", new TypeToken<Boolean>() {
         }.getType(), headers, parameter, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean success) {
@@ -161,7 +168,7 @@ public class LibraryService {
     }
 
 
-    public static void deleteReservation(Reservation toDelete, final Callback<Boolean> callback) {
+    public void deleteReservation(Reservation toDelete, final Callback<Boolean> callback) {
         checkServerUrlSet();
         checkLoggedIn();
         HashMap<String, String> headers = getAuthHeaders();
@@ -169,7 +176,7 @@ public class LibraryService {
         HashMap<String, String> parameter = new HashMap<>();
         parameter.put("id", toDelete.getReservationId());
 
-        Request<Boolean> request = new Request<>(HttpVerb.DELETE, serverUrl + "/reservations", Boolean.class, headers, parameter, new Callback<Boolean>() {
+        Request<Boolean> request = new Request<>(httpClient, HttpVerb.DELETE, serverUrl + "/reservations", Boolean.class, headers, parameter, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean input) {
                 callback.onCompletion(input);
@@ -183,12 +190,12 @@ public class LibraryService {
         request.execute();
     }
 
-    public static void getGadgets(final Callback<List<Gadget>> callback) {
+    public void getGadgets(final Callback<List<Gadget>> callback) {
         checkServerUrlSet();
         checkLoggedIn();
         HashMap<String, String> headers = getAuthHeaders();
 
-        Request<List<Gadget>> request = new Request<>(HttpVerb.GET, serverUrl + "/gadgets", new TypeToken<List<Gadget>>() {
+        Request<List<Gadget>> request = new Request<>(httpClient, HttpVerb.GET, serverUrl + "/gadgets", new TypeToken<List<Gadget>>() {
         }.getType(), headers, null, new Callback<List<Gadget>>() {
             @Override
             public void onCompletion(List<Gadget> input) {
@@ -210,13 +217,13 @@ public class LibraryService {
         return headers;
     }
 
-    private static void checkServerUrlSet() {
+    private void checkServerUrlSet() {
         if(serverUrl == null) {
             throw new IllegalStateException("No server address is set, call setServerAddress before using this method.");
         }
     }
 
-    private static void checkLoggedIn() {
+    private void checkLoggedIn() {
         if (token == null) {
             throw new IllegalStateException("Not logged in, call login before using this method.");
         }

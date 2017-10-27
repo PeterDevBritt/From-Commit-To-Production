@@ -14,8 +14,8 @@ import android.view.inputmethod.InputMethodManager;
 
 import ch.hsr.mge.gadgeothek.R;
 import ch.hsr.mge.gadgeothek.service.Callback;
-import ch.hsr.mge.gadgeothek.service.LibraryService;
 
+import static ch.hsr.mge.gadgeothek.GadgeothekApplication.libraryService;
 
 public class AbstractAuthenticationActivity extends AppCompatActivity {
 
@@ -93,9 +93,9 @@ public class AbstractAuthenticationActivity extends AppCompatActivity {
                 getString(R.string.settings_server_address),
                 getString(R.string.settings_default_server));
 
-        LibraryService.setServerAddress(url);
+        libraryService.setServerAddress(url);
 
-        LibraryService.login(email, password, new Callback<Boolean>() {
+        libraryService.login(email, password, new Callback<Boolean>() {
             @Override
             public void onCompletion(Boolean success) {
                 SharedPreferences preferences = getSharedPreferences(PREFERENCES, MODE_PRIVATE);
