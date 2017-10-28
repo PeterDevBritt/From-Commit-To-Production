@@ -9,21 +9,27 @@ pipeline {
             steps {
                 sh 'cd Gadgeothek; ./gradlew build'
             }
+            post {
+                success {
+                    archiveArtifacts '**/outputs/apk/*.apk'
+                }
+            }
         }
         stage('Analyze Code') {
             steps {
                 sh 'cd Gadgeothek; ./gradlew lint'
             }
+            post {
+                success {
+                    archiveArtifacts '**/reports/lint*.html'
+                }
+             }
+
         }
         stage('End2End Tests') {
             steps {
                 sh '$ adb shell am instrument ch.hsr.mge.gadgeothek.RegisterTest/ch.hsr.mge.gadgeothek.TestRunner'
             }
-        }
-    }
-    post {
-        success {
-            archiveArtifacts '**/outputs/apk/*.apk;**/reports/lint*.html'
         }
     }
 }
