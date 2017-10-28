@@ -10,6 +10,11 @@ pipeline {
                 sh 'cd Gadgeothek; ./gradlew build'
             }
         }
+        stage('Analyze Code') {
+            steps {
+                sh ./gradlew lint'
+            }
+        }
         stage('End2End Tests') {
             steps {
                 sh 'adb shell am instrument ch.hsr.mge.gadgeothek.RegisterTest/ch.hsr.mge.gadgeothek.TestRunner'
