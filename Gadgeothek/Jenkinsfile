@@ -12,7 +12,7 @@ pipeline {
         }
         stage('Analyze Code') {
             steps {
-                sh ./gradlew lint'
+                sh './gradlew lint'
             }
         }
         stage('End2End Tests') {
