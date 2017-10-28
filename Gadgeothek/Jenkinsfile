@@ -30,7 +30,7 @@ pipeline {
                 sh '(cd Gadgeothek; ./gradlew test)'
             }
         }
-        stage('Test Store')
+        stage('Test Store') {
             steps {
                 sh '(cd Gadgeothek; ./gradlew storeResults)'
             }
