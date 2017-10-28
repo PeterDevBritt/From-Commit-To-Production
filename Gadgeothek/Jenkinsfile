@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
-                sh 'cd Gadgeothek; ./gradlew build'
+                sh '(cd Gadgeothek; ./gradlew build)'
             }
             post {
                 success {
@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Analyze Code') {
             steps {
-                sh 'cd Gadgeothek; ./gradlew lint'
+                sh '(cd Gadgeothek; ./gradlew lint)'
             }
             post {
                 success {
@@ -28,7 +28,7 @@ pipeline {
         }
         stage('End2End Tests') {
             steps {
-                sh '(cd Gadgeothek; ./gradlew connectedfullDebugAndroidTest)'
+                sh '(cd Gadgeothek; ./gradlew connecteddemoDebugAndroidTest)'
             }
         }
     }
