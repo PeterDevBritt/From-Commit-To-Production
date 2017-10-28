@@ -29,6 +29,11 @@ pipeline {
             steps {
                 sh '(cd Gadgeothek; ./gradlew test)'
             }
+            post {
+                always {
+                    junit allowEmptyResults: true, testResults: '**/test-results/*.xml'
+                }
+             }
         }
         stage('End2End Tests') {
             steps {
