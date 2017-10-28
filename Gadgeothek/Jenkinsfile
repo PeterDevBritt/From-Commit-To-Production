@@ -40,10 +40,5 @@ pipeline {
                 sh '(cd Gadgeothek; ./gradlew connectedfullDebugAndroidTest)'
             }
         }
-        post {
-            always {
-                cleanWs()
-            }
-        }
     }
 }
