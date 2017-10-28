@@ -26,6 +26,11 @@ pipeline {
              }
 
         }
+        stage('Unit Tests') {
+            steps {
+                sh '(cd Gadgeothek; ./gradlew test)'
+            }
+        }
         stage('End2End Tests') {
             steps {
                 sh '(cd Gadgeothek; ./gradlew connectedfullDebugAndroidTest)'
