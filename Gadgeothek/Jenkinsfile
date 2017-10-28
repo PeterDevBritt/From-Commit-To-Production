@@ -24,12 +24,16 @@ pipeline {
                     archiveArtifacts '**/reports/lint*.html'
                 }
              }
-
         }
         stage('Unit Tests') {
             steps {
                 sh '(cd Gadgeothek; ./gradlew test)'
             }
+            post {
+                always {
+                    junit '**/build/test-results/*.xml'
+                }
+             }
         }
         stage('End2End Tests') {
             steps {
