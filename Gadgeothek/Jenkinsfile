@@ -17,13 +17,13 @@ pipeline {
         }
         stage('End2End Tests') {
             steps {
-                sh 'adb shell am instrument ch.hsr.mge.gadgeothek.RegisterTest/ch.hsr.mge.gadgeothek.TestRunner'
+                sh '$ adb shell am instrument ch.hsr.mge.gadgeothek.RegisterTest/ch.hsr.mge.gadgeothek.TestRunner'
             }
         }
     }
     post {
         success {
-            archiveArtifacts '**/outputs/apk/*.apk'
+            archiveArtifacts '**/outputs/apk/*.apk;**/reports/lint*.html'
         }
     }
 }
