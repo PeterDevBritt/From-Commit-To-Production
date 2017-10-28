@@ -12,7 +12,7 @@ pipeline {
         }
         stage('End2End Tests') {
             steps {
-                sh 'echo End2End Tests'
+                sh 'adb shell am instrument ch.hsr.mge.gadgeothek.RegisterTest/ch.hsr.mge.gadgeothek.TestRunner'
             }
         }
     }
