@@ -35,6 +35,11 @@ pipeline {
                 }
              }
         }
+        stage('Test Store')
+            steps {
+                sh '(cd Gadgeothek; ./gradlew storeResults)'
+            }
+        }
         stage('End2End Tests') {
             steps {
                 sh '(cd Gadgeothek; ./gradlew connectedfullDebugAndroidTest)'
